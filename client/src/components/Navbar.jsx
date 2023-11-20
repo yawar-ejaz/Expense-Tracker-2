@@ -24,18 +24,19 @@ const Navbar = ({ title = "Title here" }) => {
       order_id: data.id,
       handler: async function (response) {
         try {
-        //   const result = await axios.post("/premium/verify", response, {
-        //     headers: {
-        //       Authorization: `Bearer ${user.token}`,
-        //     }
-        //   });
-        //   if (result.data.success) {
-        //       alert("Payment Success");
-        //   }
+          const { token } = JSON.parse(localStorage.getItem("user"));
+          const result = await axios.post("/premium/verify", response, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          if (result.data.success) {
+            alert("Payment Success");
+          }
         } catch (error) {
           console.log(error);
         }
-      }
+      },
     };
     const razorpayObject = new window.Razorpay(options);
     razorpayObject.open();

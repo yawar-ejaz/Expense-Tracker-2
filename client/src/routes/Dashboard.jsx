@@ -24,22 +24,23 @@ function Dashboard() {
   return (
     <>
       <Navbar title="ADD EXPENSE" />
-      <div className="bg-white p-2 rounded w-full">
-        <form
-          onSubmit={handleSubmit(createExpense)}
-          className="w-80 mx-auto flex flex-col gap-3"
-        >
-          <div className="flex flex-row gap-2">
+
+      {/* <div className="card w-96 bg-base-100 shadow-xl"> */}
+      {/* <div className="card-body"> */}
+      {/* <h2 className="card-title">Shoes!</h2> */}
+      <div className="card w-[90] md:w-[60] lg:w-[40] max-w-md bg-base-100 p-2 shadow-xl mx-auto">
+        <form onSubmit={handleSubmit(createExpense)} className="card-body">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <input
               type="number"
               placeholder="Amount"
-              className="mt-1 p-2 w-40 border rounded-md text-gray-800 focus:outline-none focus:ring focus:border-blue-300"
+              className="input input-bordered w-full"
               autoComplete="off"
               required
               {...register("amount")}
             />
             <select
-              className="border border-gray-800 rounded-md focus:outline-none focus:border-gray-500 w-40"
+              className="select select-bordered w-full"
               {...register("category")}
             >
               <option value="food">Food</option>
@@ -53,7 +54,7 @@ function Dashboard() {
             <input
               type="text"
               placeholder="Description (optional)"
-              className="mt-1 p-2 w-full border rounded-md text-gray-800 focus:outline-none focus:ring focus:border-blue-300"
+              className="input input-bordered w-full"
               autoComplete="off"
               {...register("description")}
               required
