@@ -1,4 +1,5 @@
 const Expenses = require("../models/expenses");
+const User = require("../models/users");
 
 
 const createExpense = async (req, res, next) => {
@@ -13,6 +14,11 @@ const createExpense = async (req, res, next) => {
             date,
             userId: req.user._id
         });
+        await User.update(
+            { totalExpense: Number(req.user.totalExpense) + Number(amount) },
+            { where: { _id: req.user._id } }
+        );
+
         res.status(201).json({
             success: true,
             message: "Expense added successfully"

@@ -42,6 +42,20 @@ const Navbar = ({ title = "Title here" }) => {
     razorpayObject.open();
   };
 
+  const showLeaderboard = async () => {
+    const { token } = JSON.parse(localStorage.getItem("user"));
+    try {
+      const response = await axios.get("/premium/leaderboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+        console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto">
@@ -68,6 +82,12 @@ const Navbar = ({ title = "Title here" }) => {
               className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
             >
               Buy Premium
+            </button>
+            <button
+              onClick={showLeaderboard}
+              className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
+            >
+              Leaderboard
             </button>
           </div>
         </div>

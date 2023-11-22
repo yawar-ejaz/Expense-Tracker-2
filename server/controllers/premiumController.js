@@ -1,8 +1,9 @@
 const Razorpay = require("razorpay");
 const User = require("../models/users");
+const orders = require("../models/orders")
 const sequelize = require("../utils/database");
 const crypto = require("crypto");
-
+const Orders = require("../models/orders");
 
 const verifyPremiumMembership = async (req, res, next) => {
     console.log("Test");
@@ -26,6 +27,10 @@ const verifyPremiumMembership = async (req, res, next) => {
             { isPremium: true },
             { where: { _id: req.user._id } }
         );
+        await Orders.update(
+            { status: "completed", paymentId: razorpay_payment_id },
+            { where: { orderId: razorpay_order_id } }
+        );
         if (updatedRows[0] === 1) {
             res.status(200).json({
                 success: true,
@@ -46,4 +51,12 @@ const verifyPremiumMembership = async (req, res, next) => {
     }
 }
 
-module.exports = { verifyPremiumMembership };
+const getLeaderboard = async (req, res, next) => {
+    const result = await User.findAll({
+        attributes: ['name', 'email', 'isPremium', 'totalExpense'],
+        order: [["totalExpense", "DESC"]]
+    });
+    res.status(200).json(result)
+}
+
+module.exports = { verifyPremiumMembership, getLeaderboard };
