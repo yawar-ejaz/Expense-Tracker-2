@@ -9,7 +9,7 @@ const Navbar = ({ title = "Title here" }) => {
       const response = await axios.get("/purchase/premium", {
         headers: {
           Authorization: `Bearer ${token}`,
-        },
+        }
       });
       handleOpenRazorPay(response.data);
     } catch (error) {
@@ -71,12 +71,7 @@ const Navbar = ({ title = "Title here" }) => {
             <NavLink to="/sign-in" className="text-white">
               Sign-in
             </NavLink>
-            <NavLink to="#" className="text-white">
-              Services
-            </NavLink>
-            <NavLink to="#" className="text-white">
-              Contact
-            </NavLink>
+
             <button
               onClick={buyPremium}
               className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"

@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Navbar } from "../components";
+import { Navbar, ExpenseTable } from "../components";
 import axios from "axios";
 
 function Dashboard() {
-  const { handleSubmit, register, reset } = useForm();
+    const { handleSubmit, register, reset } = useForm();
+    const [expenses, setExpenses] = useState([]);
+
+    const getExpenses = async () => {
+      const { token } = JSON.parse(localStorage.getItem("user"));
+      try {
+        const result = await axios.get("/expense", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setExpenses(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    useEffect(() => {
+        getExpenses();
+    }, [])
 
   const createExpense = async (data) => {
     const { token } = JSON.parse(localStorage.getItem("user"));
@@ -14,21 +33,21 @@ function Dashboard() {
           Authorization: `Bearer ${token}`,
         },
       });
-      alert(result?.data?.message);
+        alert(result?.data?.message);
+        getExpenses();
     } catch (error) {
       console.log(error);
       alert(error.response?.data?.message);
     }
     reset();
   };
+
+
   return (
     <>
       <Navbar title="ADD EXPENSE" />
 
-      {/* <div className="card w-96 bg-base-100 shadow-xl"> */}
-      {/* <div className="card-body"> */}
-      {/* <h2 className="card-title">Shoes!</h2> */}
-      <div className="card w-[90] md:w-[60] lg:w-[40] max-w-md bg-base-100 p-2 shadow-xl mx-auto">
+      <div className="card w-[90%] md:w-[60%] lg:w-[40%] max-w-md bg-base-100 mt-2 mb-5 shadow-md mx-auto sm:w-[75%]">
         <form onSubmit={handleSubmit(createExpense)} className="card-body">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <input
@@ -69,6 +88,7 @@ function Dashboard() {
           </button>
         </form>
       </div>
+          <ExpenseTable expenses={expenses} getExpenses={ getExpenses } />
     </>
   );
 }

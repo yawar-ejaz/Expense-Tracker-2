@@ -53,7 +53,7 @@ const verifyPremiumMembership = async (req, res, next) => {
 
 const getLeaderboard = async (req, res, next) => {
     const result = await User.findAll({
-        attributes: ['name', 'email', 'isPremium', 'totalExpense'],
+        attributes: ['name', 'isPremium', 'totalExpense'],
         order: [["totalExpense", "DESC"]]
     });
     res.status(200).json(result)
