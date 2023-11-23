@@ -23,25 +23,38 @@ const verifyPremiumMembership = async (req, res, next) => {
 
     const isValid = generatedSignature == razorpay_signature;
     if (isValid) {
-        const updatedRows = await User.update(
-            { isPremium: true },
-            { where: { _id: req.user._id } }
-        );
-        await Orders.update(
-            { status: "completed", paymentId: razorpay_payment_id },
-            { where: { orderId: razorpay_order_id } }
-        );
-        if (updatedRows[0] === 1) {
-            res.status(200).json({
-                success: true,
-                message: "Payment Successful!",
-            });
-        } else {
-            res.status(400).json({
-                success: false,
-                message: "Payment Not Successful!",
-            });
+        try {
+            const t = await sequelize.transaction();
+            const updatedRows = await User.update(
+                { isPremium: true },
+                {
+                    where: { _id: req.user._id },
+                    transaction: t
+                }
+            );
+            await Orders.update(
+                { status: "completed", paymentId: razorpay_payment_id },
+                {
+                    where: { orderId: razorpay_order_id },
+                    transaction: t
+                }
+            );
+            t.commit();
+            if (updatedRows[0] === 1) {
+                res.status(200).json({
+                    success: true,
+                    message: "Payment Successful!",
+                });
+            } else {
+                res.status(400).json({
+                    success: false,
+                    message: "Payment Not Successful!",
+                });
 
+            }
+        } catch (error) {
+            t.rollback();
+            console.log(error);
         }
     } else {
         res.status(400).json({

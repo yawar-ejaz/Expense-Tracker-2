@@ -33,7 +33,7 @@ const ExpenseTable = ({ expenses, getExpenses }) => {
             <th scope="col">DELETE</th>
           </tr>
         </thead>
-        <tbody id="tableBody">
+        <tbody>
           {expenses.map((expense, index) => (
             <tr key={index}>
               <th scope="row">{index + 1}</th>

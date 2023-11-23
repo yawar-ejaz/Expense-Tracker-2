@@ -1,15 +1,17 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ title = "Title here" }) => {
+  const navigate = useNavigate();
   const buyPremium = async () => {
     const { token } = JSON.parse(localStorage.getItem("user"));
     try {
       const response = await axios.get("/purchase/premium", {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       });
       handleOpenRazorPay(response.data);
     } catch (error) {
@@ -42,20 +44,6 @@ const Navbar = ({ title = "Title here" }) => {
     razorpayObject.open();
   };
 
-  const showLeaderboard = async () => {
-    const { token } = JSON.parse(localStorage.getItem("user"));
-    try {
-      const response = await axios.get("/premium/leaderboard", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-        console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto">
@@ -79,7 +67,7 @@ const Navbar = ({ title = "Title here" }) => {
               Buy Premium
             </button>
             <button
-              onClick={showLeaderboard}
+              onClick={() => navigate("/leaderboard")}
               className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
             >
               Leaderboard
