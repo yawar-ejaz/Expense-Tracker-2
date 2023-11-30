@@ -9,12 +9,16 @@ const premiumRoutes = require('./routes/premiumRoutes');
 const User = require('./models/users');
 const Expense = require('./models/expenses');
 const Order = require('./models/orders');
+const ForgotPasswordRequest = require('./models/forgotPasswordRequests');
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(ForgotPasswordRequest);
+ForgotPasswordRequest.belongsTo(User);
 
 const port = 3000;
 const app = express();
@@ -37,7 +41,7 @@ async function startServer() {
             console.log(`Server running on port ${port}...`);
         });
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 

@@ -1,12 +1,19 @@
 import "./App.css";
-import { SignIn, SignUp, Root, Dashboard, Leaderboard} from "./routes";
+import {
+  SignIn,
+  SignUp,
+  Root,
+  Dashboard,
+  Leaderboard,
+  ForgotPassword,
+  ResetPassword,
+} from "./routes";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
-axios.defaults.baseURL="http://localhost:3000"
+axios.defaults.baseURL = "http://localhost:3000";
 
 function App() {
-
-    return (
+  return (
     <Router>
       <Routes>
         <Route path="/" element={<Root />} />
@@ -14,6 +21,8 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </Router>
   );

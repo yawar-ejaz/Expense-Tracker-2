@@ -84,12 +84,21 @@ function SignIn() {
             Login
           </button>
         </form>
+
         <div className="w-80 mx-auto">
           <button
             className="mt-4 w-full btn btn-neutral normal-case"
             onClick={() => navigate("/sign-up")}
           >
             Sign Up
+          </button>
+        </div>
+        <div className="w-80 mx-auto">
+          <button
+            className="mt-4 w-full btn btn-neutral normal-case"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot password
           </button>
         </div>
       </div>
