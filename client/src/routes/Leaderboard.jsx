@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Header, LeaderboardTable } from "../components";
+import { Header, LeaderboardTable, Navbar } from "../components";
 import axios from "axios";
 
 const Leaderboard = () => {
@@ -15,7 +15,8 @@ const Leaderboard = () => {
             });
             setAccounts(response.data);
           } catch (error) {
-            console.log(error);
+              console.log(error);
+              alert(error.response?.data?.message);
           }
         };
         showLeaderboard();
@@ -23,7 +24,7 @@ const Leaderboard = () => {
   
   return (
     <>
-      <Header mainHeading="Leaderboard" sideHeading="" />
+      <Navbar title="Leaderboard" />
       <LeaderboardTable accounts={accounts} />
     </>
   );

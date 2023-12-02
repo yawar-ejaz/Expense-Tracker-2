@@ -16,10 +16,10 @@ const isPremium = async(req, res, next) => {
             attributes: { isPremium }
         });
         if (user.isPremium == true) {
+            req.user = user;
             next();
         }
         else {
-            console.log("sad");
             return res.status(400).json({
                 success: false,
                 message: "Not a premium user"
@@ -27,6 +27,10 @@ const isPremium = async(req, res, next) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(400).json({
+            success: false,
+            message: "Not able to verify premium membership"
+        });
     }
 }
 

@@ -10,6 +10,7 @@ const User = require('./models/users');
 const Expense = require('./models/expenses');
 const Order = require('./models/orders');
 const ForgotPasswordRequest = require('./models/forgotPasswordRequests');
+const Download = require("./models/downloads");
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
@@ -19,6 +20,9 @@ Order.belongsTo(User);
 
 User.hasMany(ForgotPasswordRequest);
 ForgotPasswordRequest.belongsTo(User);
+
+Download.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE" });
+User.hasMany(Download, { foreignKey: "userId" });
 
 const port = 3000;
 const app = express();

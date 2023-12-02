@@ -7,6 +7,7 @@ import {
   Leaderboard,
   ForgotPassword,
   ResetPassword,
+  Report
 } from "./routes";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/download-report" element={<Report />} />
       </Routes>
     </Router>
   );

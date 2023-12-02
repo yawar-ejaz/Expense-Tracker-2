@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -48,18 +49,14 @@ const Navbar = ({ title = "Title here" }) => {
     <nav className="bg-gray-800 p-4">
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
-          <NavLink to="/dashboard" className="text-white text-lg font-bold">
-            {title}
-          </NavLink>
+          <div className="flex space-x-4">
+            <NavLink to="/dashboard" className="text-white my-auto">
+              <FaHome className="h-6 w-6" />
+            </NavLink>
+            <h1 className="text-white text-lg font-bold">{title}</h1>
+          </div>
 
           <div className="flex space-x-4">
-            <NavLink to="/" className="text-white">
-              Home
-            </NavLink>
-            <NavLink to="/sign-in" className="text-white">
-              Sign-in
-            </NavLink>
-
             <button
               onClick={buyPremium}
               className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
@@ -71,6 +68,12 @@ const Navbar = ({ title = "Title here" }) => {
               className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
             >
               Leaderboard
+            </button>
+            <button
+              onClick={() => navigate("/download-report")}
+              className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
+            >
+              Report
             </button>
           </div>
         </div>

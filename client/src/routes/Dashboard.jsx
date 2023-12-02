@@ -17,7 +17,8 @@ function Dashboard() {
         });
         setExpenses(result.data);
       } catch (error) {
-        console.log(error);
+          console.log(error);
+          alert(error.response?.data?.message);
       }
     };
 
