@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Header, LeaderboardTable, Navbar } from "../components";
+import { LeaderboardTable, Navbar } from "../components";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Leaderboard = () => {
+    const navigate = useNavigate();
     const [accounts, setAccounts] = useState([]);
     useEffect(() => {
         const showLeaderboard = async () => {
@@ -17,6 +19,7 @@ const Leaderboard = () => {
           } catch (error) {
               console.log(error);
               alert(error.response?.data?.message);
+              navigate("/dashboard");
           }
         };
         showLeaderboard();

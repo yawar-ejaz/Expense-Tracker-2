@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 const ExpenseTable = ({ expenses, getExpenses }) => {
+//   const [page, setPage] = useState(1);
+//     const [totalPages, setTotalPages] = useState(1);
+    
+//   const itemsPerPage = 10;
+
+  const dateOptions = {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  };
+
   const deleteExpense = async (expenseId) => {
     try {
       const { token } = JSON.parse(localStorage.getItem("user"));
@@ -11,15 +22,20 @@ const ExpenseTable = ({ expenses, getExpenses }) => {
         },
       });
       getExpenses();
-      //   expenses = result.data;
     } catch (error) {
       console.log(error);
+      alert(error.response?.data?.message);
     }
-  };
+  };  
 
   if (expenses.length === 0) {
-    return <h1>You have no expenses</h1>;
+    return (
+      <div className="container mx-auto text-center">
+        <h1 className="text-2xl font-bold">You currently have no expenses</h1>
+      </div>
+    );
   }
+
   return (
     <>
       <table className="table table-zebra table-md my-4">
@@ -30,7 +46,7 @@ const ExpenseTable = ({ expenses, getExpenses }) => {
             <th scope="col">CATEGORY</th>
             <th scope="col">DESCRIPTION</th>
             <th scope="col">DATE</th>
-            <th scope="col">DELETE</th>
+            <th scope="col">ACTION</th>
           </tr>
         </thead>
         <tbody>
@@ -40,10 +56,15 @@ const ExpenseTable = ({ expenses, getExpenses }) => {
               <td>{expense.amount}</td>
               <td>{expense.category}</td>
               <td>{expense.description}</td>
-              <td>{expense.date}</td>
+              <td>
+                {new Date(expense.date).toLocaleDateString(
+                  "en-US",
+                  dateOptions
+                )}
+              </td>
               <td>
                 <button
-                  className="btn btn-sm btn-danger"
+                  className="btn btn-sm btn-outline btn-error"
                   onClick={() => deleteExpense(expense._id)}
                 >
                   Delete

@@ -44,13 +44,24 @@ const createExpense = async (req, res, next) => {
 }
 
 const getExpenses = async (req, res, next) => {
-    console.log("expenses here")
-    const result = await Expenses.findAll({
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = parseInt(req.query.rows) || 10;
+    const startIndex = (page - 1) * itemsPerPage;
+
+    const result = await Expenses.findAndCountAll({
         attributes: ['_id', 'amount', 'date', 'category', 'description'],
         order: [["date", "DESC"]],
-        where: { userId: req.user._id }
+        where: { userId: req.user._id },
+        offset: startIndex,
+        limit: itemsPerPage
     });
-    res.status(201).json(result);
+    const { count, rows } = result;
+    const totalPages = Math.ceil(count / itemsPerPage);
+    res.status(200).json({
+        expenses: rows,
+        currentPage: page,
+        totalPages: totalPages,
+    });
 }
 
 const deleteExpense = async (req, res, next) => {
@@ -58,7 +69,7 @@ const deleteExpense = async (req, res, next) => {
         const t = await sequelize.transaction();
         const expenseId = req.params.expenseId;
         if (!expenseId) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false,
                 message: "Expense does not exist"
             });
@@ -67,7 +78,6 @@ const deleteExpense = async (req, res, next) => {
             {
                 where: { _id: expenseId },
                 transaction: t
-
             }
         );
         await Expenses.destroy(
@@ -87,11 +97,14 @@ const deleteExpense = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: "Expense Deleted"
+            message: "Expense deleted"
         });
     } catch (error) {
         await t.rollback();
-        console.log(error);
+        res.status(400).json({
+            success: false,
+            message: "Unable to delete expense"
+        });
     }
 }
 

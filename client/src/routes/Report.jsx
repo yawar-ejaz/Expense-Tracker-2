@@ -15,21 +15,24 @@ const Report = () => {
                 Authorization: `Bearer ${token}`,
               },
             });
-            console.log(result);
-            const url = result?.data?.url;
-            const a = document.createElement('a');
-            a.href = url;
-            a.click();
+            if (result?.data?.success == false) {
+                alert(result?.data?.message);
+            }
+            else {
+                const url = result?.data?.url;
+                const a = document.createElement("a");
+                a.href = url;
+                a.click();
+            }
         } catch (error) {
             console.log(error);
             alert(error.response?.data?.message);
         }
-
   };
 
   return (
     <>
-      <Navbar title="Report" />
+      <Navbar title="Download Report" />
       <div className="card w-[90%] md:w-[60%] lg:w-[40%] max-w-md bg-base-100 mt-2 mb-5 shadow-md mx-auto sm:w-[75%]">
         <form onSubmit={handleSubmit(getReport)} className="card-body">
           <div className="grid grid-cols-1">

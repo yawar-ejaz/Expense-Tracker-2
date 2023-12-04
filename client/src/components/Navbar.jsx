@@ -14,20 +14,20 @@ const Navbar = ({ title = "Title here" }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      handleOpenRazorPay(response.data);
+      handleOpenRazorPay(response.data, token);
     } catch (error) {
       console.log(error);
+      alert(error.response?.data?.message);
     }
   };
 
-  const handleOpenRazorPay = (data) => {
+  const handleOpenRazorPay = (data, token) => {
     const options = {
       key: import.meta.env.VITE_RAZOR_PAY_KEY,
       name: "Expense Tracker",
       order_id: data.id,
       handler: async function (response) {
         try {
-          const { token } = JSON.parse(localStorage.getItem("user"));
           const result = await axios.post("/premium/verify", response, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -38,6 +38,7 @@ const Navbar = ({ title = "Title here" }) => {
           }
         } catch (error) {
           console.log(error);
+          alert(error.response?.data?.message);
         }
       },
     };

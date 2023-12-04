@@ -109,8 +109,8 @@ const getReport = async (req, res, next) => {
 
         if (expenses.length == 0) {
             return res.status(200).json({
-                url: "",
                 success: false,
+                message: "There are no expenses to download"
             });
         }
 
@@ -127,7 +127,7 @@ const getReport = async (req, res, next) => {
         const fileUrl = await uploadToS3(csv, fileName);
 
         //save to database
-        await Downloads.create({ url: fileUrl });
+        await Downloads.create({ url: fileUrl, userId: user._id });
 
         return res.status(200).json({
             url: fileUrl,

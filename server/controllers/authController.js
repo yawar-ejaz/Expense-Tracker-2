@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require("uuid");
 
 const createUser = async (req, res, next) => {
     const { name, email, password } = req.body;
+
     try {
         const existingUser = await Users.findOne({
             where: {
@@ -26,6 +27,7 @@ const createUser = async (req, res, next) => {
             email,
             password: await encrypt(password)
         });
+
         const token = createToken(user._id)
         res.status(201).json({
             success: true,
@@ -39,9 +41,8 @@ const createUser = async (req, res, next) => {
             success: false,
             message: "Failed to add user to the database!"
         });
-        console.log("failed to add user to the database. " + error);
     }
-}
+};
 
 const login = async (req, res, next) => {
     const { email, password } = req.body;
@@ -56,7 +57,7 @@ const login = async (req, res, next) => {
         if (!existingUser) {
             return res.status(400).json({
                 success: false,
-                message: "user not exists!"
+                message: "User not exists!"
             });
         }
         if (await isMatching(password, existingUser.password)) {
@@ -66,12 +67,12 @@ const login = async (req, res, next) => {
                 token,
                 name: existingUser.name,
                 email: existingUser.email,
-                message: "User Logged In!"
+                message: "User logged in!"
             });
         }
         res.status(401).json({
             success: false,
-            message: "incorrect password"
+            message: "Incorrect password"
         });
     } catch (error) {
         res.status(500).json({
@@ -79,7 +80,7 @@ const login = async (req, res, next) => {
             message: "Failed to login"
         });
     }
-}
+};
 
 const sendResetLink = async (req, res, next) => {
     const { email } = req.body;
