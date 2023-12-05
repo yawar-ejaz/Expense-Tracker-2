@@ -8,15 +8,21 @@ function Dashboard() {
   const [expenses, setExpenses] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(
+    JSON.parse(localStorage.getItem("rows") || 5)
+  );
 
   const getExpenses = async () => {
     const { token } = JSON.parse(localStorage.getItem("user"));
     try {
-      const result = await axios.get(`/expense?page=${page}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const result = await axios.get(
+        `/expense?page=${page}&rows=${itemsPerPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setExpenses(result.data.expenses);
       setTotalPages(result.data.totalPages);
       setPage(result.data.currentPage);
@@ -28,7 +34,12 @@ function Dashboard() {
 
   useEffect(() => {
     getExpenses();
-  }, [page]);
+  }, [page, itemsPerPage]);
+
+  const handleRowChange = (e) => {
+    setItemsPerPage(e.target.value);
+    localStorage.setItem("rows", e.target.value);
+  };
 
   const createExpense = async (data) => {
     const { token } = JSON.parse(localStorage.getItem("user"));
@@ -44,11 +55,6 @@ function Dashboard() {
     }
     reset();
   };
-
-  //const totalPages = Math.ceil(expenses.length / itemsPerPage);
-  //   const startIndex = (page - 1) * itemsPerPage;
-  //   const endIndex = startIndex + itemsPerPage;
-  //   const currentExpenses = expenses.slice(startIndex, endIndex);
 
   const increasePage = () => {
     if (page < totalPages) {
@@ -108,7 +114,7 @@ function Dashboard() {
         </form>
       </div>
       <ExpenseTable expenses={expenses} getExpenses={getExpenses} />
-      <div className="pagination flex space-x-4 my-auto">
+      <div className="pagination flex space-x-4 w-fit mb-5 mx-auto">
         <button className="btn btn-sm btn-outline" onClick={decreasePage}>
           Prev
         </button>
@@ -118,6 +124,12 @@ function Dashboard() {
         <button className="btn btn-sm btn-outline" onClick={increasePage}>
           Next
         </button>
+        <select className="" value={itemsPerPage} onChange={handleRowChange}>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+        </select>
       </div>
     </>
   );

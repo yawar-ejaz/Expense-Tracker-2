@@ -1,13 +1,20 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuthContext from "../hooks/useAuthContext";
+import { ACTIONS } from "../context/authContext";
+import { LuMenuSquare } from "react-icons/lu";
 
 const Navbar = ({ title = "Title here" }) => {
   const navigate = useNavigate();
+  const {
+    user: { token, isPremium },
+    dispatch,
+  } = useAuthContext();
+
   const buyPremium = async () => {
-    const { token } = JSON.parse(localStorage.getItem("user"));
     try {
       const response = await axios.get("/purchase/premium", {
         headers: {
@@ -35,6 +42,9 @@ const Navbar = ({ title = "Title here" }) => {
           });
           if (result.data.success) {
             alert("Payment Success");
+            dispatch({
+              type: ACTIONS.UPGRADE,
+            });
           }
         } catch (error) {
           console.log(error);
@@ -44,6 +54,12 @@ const Navbar = ({ title = "Title here" }) => {
     };
     const razorpayObject = new window.Razorpay(options);
     razorpayObject.open();
+  };
+
+  const logout = () => {
+    dispatch({
+      type: ACTIONS.LOGOUT,
+    });
   };
 
   return (
@@ -56,26 +72,62 @@ const Navbar = ({ title = "Title here" }) => {
             </NavLink>
             <h1 className="text-white text-lg font-bold">{title}</h1>
           </div>
-
-          <div className="flex space-x-4">
+          {/* Desktop Navbar starts */}
+          <div className="hidden space-x-4 md:flex">
+            {!isPremium && (
+              <button
+                onClick={buyPremium}
+                className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
+              >
+                Buy Premium
+              </button>
+            )}
+            {isPremium && (
+              <>
+                <button
+                  onClick={() => navigate("/leaderboard")}
+                  className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
+                >
+                  Leaderboard
+                </button>
+                <button
+                  onClick={() => navigate("/download-report")}
+                  className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
+                >
+                  Report
+                </button>
+              </>
+            )}
             <button
-              onClick={buyPremium}
+              onClick={logout}
               className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
             >
-              Buy Premium
+              Logout
             </button>
-            <button
-              onClick={() => navigate("/leaderboard")}
-              className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
-            >
-              Leaderboard
-            </button>
-            <button
-              onClick={() => navigate("/download-report")}
-              className="bg-white text-black px-3 rounded border border-gray-300 hover:bg-gray-100 focus:outline-none"
-            >
-              Report
-            </button>
+          </div>
+          {/* Desktop Navbar ends */}
+          <div className="md:hidden">
+            <div className="drawer drawer-end z-10">
+              <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+              <div className="drawer-content">
+                <label
+                  htmlFor="my-drawer"
+                  className="bg-gray-800 drawer-button cursor-pointer z-20"
+                >
+                  <LuMenuSquare className="h-5 w-5 text-white" />
+                </label>
+              </div>
+              <div className="drawer-side">
+                <label
+                  htmlFor="my-drawer"
+                  aria-label="close sidebar"
+                  className="drawer-overlay"
+                />
+                <div className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+                  <div></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

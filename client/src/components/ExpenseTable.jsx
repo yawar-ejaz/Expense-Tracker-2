@@ -1,12 +1,7 @@
-import React, { useState } from "react";
 import axios from "axios";
+import React from "react";
 
 const ExpenseTable = ({ expenses, getExpenses }) => {
-//   const [page, setPage] = useState(1);
-//     const [totalPages, setTotalPages] = useState(1);
-    
-//   const itemsPerPage = 10;
-
   const dateOptions = {
     day: "2-digit",
     month: "long",
@@ -26,7 +21,7 @@ const ExpenseTable = ({ expenses, getExpenses }) => {
       console.log(error);
       alert(error.response?.data?.message);
     }
-  };  
+  };
 
   if (expenses.length === 0) {
     return (
@@ -38,42 +33,44 @@ const ExpenseTable = ({ expenses, getExpenses }) => {
 
   return (
     <>
-      <table className="table table-zebra table-md my-4">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">AMOUNT</th>
-            <th scope="col">CATEGORY</th>
-            <th scope="col">DESCRIPTION</th>
-            <th scope="col">DATE</th>
-            <th scope="col">ACTION</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((expense, index) => (
-            <tr key={index}>
-              <th scope="row">{index + 1}</th>
-              <td>{expense.amount}</td>
-              <td>{expense.category}</td>
-              <td>{expense.description}</td>
-              <td>
-                {new Date(expense.date).toLocaleDateString(
-                  "en-US",
-                  dateOptions
-                )}
-              </td>
-              <td>
-                <button
-                  className="btn btn-sm btn-outline btn-error"
-                  onClick={() => deleteExpense(expense._id)}
-                >
-                  Delete
-                </button>
-              </td>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra table-xs md:table-md my-4 ">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">AMOUNT</th>
+              <th scope="col">CATEGORY</th>
+              <th scope="col">DESCRIPTION</th>
+              <th scope="col">DATE</th>
+              <th scope="col">ACTION</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {expenses.map((expense, index) => (
+              <tr key={index}>
+                <th scope="row">{index + 1}</th>
+                <td>{expense.amount}</td>
+                <td>{expense.category}</td>
+                <td>{expense.description}</td>
+                <td>
+                  {new Date(expense.date).toLocaleDateString(
+                    "en-US",
+                    dateOptions
+                  )}
+                </td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-outline btn-error"
+                    onClick={() => deleteExpense(expense._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };

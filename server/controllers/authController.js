@@ -34,6 +34,7 @@ const createUser = async (req, res, next) => {
             token,
             name: user.name,
             email: user.email,
+            isPremium: user.isPremium,
             message: "Account created successfully"
         });
     } catch (error) {
@@ -67,6 +68,7 @@ const login = async (req, res, next) => {
                 token,
                 name: existingUser.name,
                 email: existingUser.email,
+                isPremium: existingUser.isPremium,
                 message: "User logged in!"
             });
         }

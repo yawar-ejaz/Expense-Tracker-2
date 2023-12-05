@@ -3,24 +3,28 @@ import { Header } from "../components";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import useAuthContext from "../hooks/useAuthContext";
+import { ACTIONS } from "../context/authContext";
 
 function SignIn() {
   const navigate = useNavigate();
   const { handleSubmit, register, reset } = useForm();
+  const { dispatch } = useAuthContext();
 
   const handleSignIn = async (data) => {
     try {
       const result = await axios.post("/auth/sign-in", data);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          name: result.data?.name,
-          email: result.data?.email,
-          token: result.data?.token,
-        })
-      );
-
-      navigate("/dashboard");
+      const user = {
+        name: result.data?.name,
+        email: result.data?.email,
+        isPremium: result.data.isPremium,
+        token: result.data?.token,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      dispatch({
+        type: ACTIONS.LOGIN,
+        payload: user,
+      });
     } catch (error) {
       console.log(error);
       alert(error.response?.data?.message);
