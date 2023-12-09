@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navbar, ExpenseTable } from "../components";
 import axios from "axios";
+import useAuthContext from "../hooks/useAuthContext";
 
 function Dashboard() {
   const { handleSubmit, register, reset } = useForm();
@@ -11,9 +12,11 @@ function Dashboard() {
   const [itemsPerPage, setItemsPerPage] = useState(
     JSON.parse(localStorage.getItem("rows") || 5)
   );
+  const {
+    user: { token },
+  } = useAuthContext();
 
   const getExpenses = async () => {
-    const { token } = JSON.parse(localStorage.getItem("user"));
     try {
       const result = await axios.get(
         `/expense?page=${page}&rows=${itemsPerPage}`,
@@ -38,6 +41,7 @@ function Dashboard() {
 
   const handleRowChange = (e) => {
     setItemsPerPage(e.target.value);
+    setPage(1);
     localStorage.setItem("rows", e.target.value);
   };
 

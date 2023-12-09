@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import { FaTrash } from "react-icons/fa";
 
 const ExpenseTable = ({ expenses, getExpenses }) => {
   const dateOptions = {
@@ -60,10 +61,10 @@ const ExpenseTable = ({ expenses, getExpenses }) => {
                 </td>
                 <td>
                   <button
-                    className="btn btn-sm btn-outline btn-error"
+                    className="cursor-pointer"
                     onClick={() => deleteExpense(expense._id)}
                   >
-                    Delete
+                    <FaTrash className="h-4 w-4 text-red-600 hover:text-red-800" />
                   </button>
                 </td>
               </tr>

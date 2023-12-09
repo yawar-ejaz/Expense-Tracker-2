@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require("path");
 const sequelize = require('./utils/database');
 const authRoutes = require('./routes/authRoutes');
 const expenseRoutes = require('./routes/expenseRoutes');
@@ -29,13 +30,17 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: process.env.CLIENT_ADDRESS
 }));
 
 app.use("/auth", authRoutes);
 app.use("/expense", expenseRoutes);
 app.use("/purchase", purchaseRoutes);
 app.use("/premium", premiumRoutes);
+// app.use(express.static(path.join(__dirname, "../client", "dist")));
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+// });
 
 async function startServer() {
     try {

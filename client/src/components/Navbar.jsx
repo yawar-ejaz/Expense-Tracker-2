@@ -124,7 +124,33 @@ const Navbar = ({ title = "Title here" }) => {
                   className="drawer-overlay"
                 />
                 <div className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-                  <div></div>
+                  <div className="flex flex-col mt-10  font-semibold">
+                    {!isPremium && (
+                      <button onClick={buyPremium} className="py-1">
+                        Buy Premium
+                      </button>
+                    )}
+
+                    {isPremium && (
+                      <>
+                        <button
+                          onClick={() => navigate("/leaderboard")}
+                          className="py-1"
+                        >
+                          Leaderboard
+                        </button>
+                        <button
+                          onClick={() => navigate("/download-report")}
+                          className="py-1"
+                        >
+                          Report
+                        </button>
+                      </>
+                    )}
+                    <button onClick={logout} className="py-1">
+                      Logout
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

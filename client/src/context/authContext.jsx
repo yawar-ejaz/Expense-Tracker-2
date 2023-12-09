@@ -1,5 +1,4 @@
-import React, { useReducer, useState, useEffect } from "react";
-import Loading from "../components/Loading";
+import React, { useEffect, useReducer } from "react";
 
 export const AuthContext = React.createContext({
   user: {
@@ -34,16 +33,9 @@ export const authReducer = (state, action) => {
 
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
-    user: {
-      isPremium: null,
-      email: null,
-      name: null,
-      token: null,
-    },
+    user: null,
     dispatch: () => {},
   });
-
-  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -53,7 +45,6 @@ export const AuthContextProvider = ({ children }) => {
         payload: user,
       });
     }
-    setLoading(false);
   }, []);
 
   return (
@@ -63,7 +54,7 @@ export const AuthContextProvider = ({ children }) => {
         dispatch,
       }}
     >
-      {isLoading ? <Loading /> : children}
+      {children}
     </AuthContext.Provider>
   );
 };
